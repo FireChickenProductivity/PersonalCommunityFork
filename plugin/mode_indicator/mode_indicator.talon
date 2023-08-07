@@ -1,12 +1,12 @@
 settings():
     # Don't show mode indicator by default
-    user.mode_indicator_show = false
+    user.mode_indicator_show = true
     # 30pixels diameter
-    user.mode_indicator_size = 30
+    user.mode_indicator_size = 48
     # Center horizontally
-    user.mode_indicator_x = 0.5
+    user.mode_indicator_x = 0
     # Align top
-    user.mode_indicator_y = 0
+    user.mode_indicator_y = 1
     # Slightly transparent
     user.mode_indicator_color_alpha = 0.75
     # Grey gradient
