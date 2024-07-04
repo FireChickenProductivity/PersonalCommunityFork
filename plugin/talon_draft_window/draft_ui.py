@@ -191,7 +191,40 @@ class DraftManager:
     def _get_visible_text(self):
         # Placeholder for a future method of getting this
         return self.area.value
+    
+    def extend_selection(self, left_amount, right_amount):
+        self.area.sel = Span(self.area.sel.left - left_amount, self.area.sel.right + right_amount)
 
+    def compute_word_left_distance(self):
+        text_to_the_left_of_cursor = self.area.value[:self.area.sel.left]
+        print('text_to_the_left_of_cursor', text_to_the_left_of_cursor)
+        word_matches = list(word_matcher.finditer(text_to_the_left_of_cursor))
+        best_match = None
+        for word_match in word_matches:
+            if best_match.start() < word_match.start() if best_match is not None else True:
+                best_match = word_match
+        if best_match is None:
+            return 0
+        return self.area.sel.left - best_match.start()
+
+    def compute_word_right_distance(self):
+        text_to_the_right_of_cursor = self.area.value[self.area.sel.right:]
+        word_matches = list(word_matcher.finditer(text_to_the_right_of_cursor))
+        best_match = None
+        for word_match in word_matches:
+            if best_match.start() > word_match.start() if best_match is not None else True:
+                best_match = word_match
+        if best_match is None:
+            return 0
+        return best_match.end()
+
+    def extend_selection_word_left(self):
+        left_distance = self.compute_word_left_distance()
+        self.extend_selection(left_distance, 0)
+
+    def extend_selection_word_right(self):
+        right_distance = self.compute_word_right_distance()
+        self.extend_selection(0, right_distance)
 
 if False:
     # Some code for testing, change above False to True and edit as desired

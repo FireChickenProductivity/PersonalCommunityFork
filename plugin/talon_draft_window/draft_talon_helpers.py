@@ -17,6 +17,12 @@ ctx_focused.matches = r"""
 title: Talon Draft
 """
 
+windows_focused_context = Context()
+windows_focused_context.matches = r"""
+title: Talon Draft
+os: windows
+"""
+
 mod.tag("draft_window_showing", desc="Tag set when draft window showing")
 setting_theme = mod.setting(
     "draft_window_theme",
@@ -100,6 +106,20 @@ class EditActions:
             return result
         return ""
 
+
+@windows_focused_context.action_class('edit')
+class WindowsEditActions:
+    def extend_left():
+        draft_manager.extend_selection(1, 0)
+
+    def extend_right():
+        draft_manager.extend_selection(0, 1)
+
+    def extend_word_left():
+        draft_manager.extend_selection_word_left()
+
+    def extend_word_right():
+        draft_manager.extend_selection_word_right()
 
 from talon import cron
 
