@@ -226,6 +226,21 @@ class DraftManager:
         right_distance = self.compute_word_right_distance()
         self.extend_selection(0, right_distance)
 
+    def move_cursor_to_position(self, position):
+        self.area.sel = Span(position, position)
+
+    def move_cursor_word_left(self):
+        left_distance = self.compute_word_left_distance()
+        new_position = self.area.sel.left - left_distance
+        self.move_cursor_to_position(new_position)
+    
+    def move_cursor_word_right(self):
+        right_distance = self.compute_word_right_distance()
+        new_position = self.area.sel.right + right_distance
+        self.move_cursor_to_position(new_position)
+    
+    
+    
 if False:
     # Some code for testing, change above False to True and edit as desired
     draft_manager = DraftManager()

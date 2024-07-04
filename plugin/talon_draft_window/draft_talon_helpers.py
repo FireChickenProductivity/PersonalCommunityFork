@@ -120,6 +120,12 @@ class WindowsEditActions:
 
     def extend_word_right():
         draft_manager.extend_selection_word_right()
+    
+    def word_left():
+        draft_manager.move_cursor_word_left()
+    
+    def word_right():
+        draft_manager.move_cursor_word_right()
 
 from talon import cron
 
