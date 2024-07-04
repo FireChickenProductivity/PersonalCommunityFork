@@ -239,7 +239,8 @@ class DraftManager:
         new_position = self.area.sel.right + right_distance
         self.move_cursor_to_position(new_position)
     
-    
+    def select_all(self):
+        self.area.sel = Span(0, len(self.area.value))
     
 if False:
     # Some code for testing, change above False to True and edit as desired

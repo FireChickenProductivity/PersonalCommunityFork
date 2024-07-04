@@ -126,6 +126,9 @@ class WindowsEditActions:
     
     def word_right():
         draft_manager.move_cursor_word_right()
+    
+    def select_all():
+        draft_manager.select_all()
 
 from talon import cron
 
