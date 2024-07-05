@@ -129,6 +129,12 @@ class WindowsEditActions:
     
     def select_all():
         draft_manager.select_all()
+    
+    def extend_line_end():
+        draft_manager.extend_end_of_line()
+
+    def extend_line_start():
+        draft_manager.extend_start_of_line()
 
 from talon import cron
 

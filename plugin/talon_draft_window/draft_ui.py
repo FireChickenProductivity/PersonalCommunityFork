@@ -242,6 +242,26 @@ class DraftManager:
     def select_all(self):
         self.area.sel = Span(0, len(self.area.value))
     
+    def compute_next_end_of_line(self):
+        next_line_ending = self.area.value.find('\n', self.area.sel.right)
+        if next_line_ending == -1:
+            return len(self.area.value)
+        return next_line_ending
+
+    def extend_end_of_line(self):
+        next_line_ending = self.compute_next_end_of_line()
+        self.area.sel = Span(self.area.sel.left, next_line_ending)
+    
+    def compute_previous_start_of_line(self):
+        previous_line_start = self.area.value.rfind('\n', 0, self.area.sel.left)
+        if previous_line_start == -1:
+            return 0
+        return previous_line_start + 1
+    
+    def extend_start_of_line(self):
+        previous_line_start = self.compute_previous_start_of_line()
+        self.area.sel = Span(previous_line_start, self.area.sel.right)
+    
 if False:
     # Some code for testing, change above False to True and edit as desired
     draft_manager = DraftManager()
