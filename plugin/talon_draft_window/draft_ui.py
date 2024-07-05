@@ -242,8 +242,10 @@ class DraftManager:
     def select_all(self):
         self.area.sel = Span(0, len(self.area.value))
     
-    def compute_next_end_of_line(self):
-        next_line_ending = self.area.value.find('\n', self.area.sel.right)
+    def compute_next_end_of_line(self, starting_value=None):
+        if not starting_value:
+            starting_value = self.area.sel.right
+        next_line_ending = self.area.value.find('\n', starting_value)
         if next_line_ending == -1:
             return len(self.area.value)
         return next_line_ending
@@ -279,7 +281,19 @@ class DraftManager:
         if amount_of_text_on_previous_line > distance_from_line_start:
             self.extend_start_of_line()
             self.reduce_selection(distance_from_line_start, 0)
-
+        
+    def extend_selection_down(self):
+        distance_from_line_start = self.area.sel.right - self.compute_previous_start_of_line()
+        self.extend_end_of_line()
+        amount_of_text_on_next_line = 0
+        if self.area.sel.right < len(self.area.value):
+            self.extend_selection(0, 1)
+            amount_of_text_on_next_line = self.compute_next_end_of_line(self.area.sel.right) - self.area.sel.right
+            if amount_of_text_on_next_line > distance_from_line_start:
+                self.extend_selection(0, distance_from_line_start)
+                print('amount_of_text_on_next_line > distance_from_line_start', amount_of_text_on_next_line > distance_from_line_start)
+            else:
+                self.extend_end_of_line()
     
 if False:
     # Some code for testing, change above False to True and edit as desired
