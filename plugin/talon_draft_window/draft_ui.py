@@ -252,8 +252,10 @@ class DraftManager:
         next_line_ending = self.compute_next_end_of_line()
         self.area.sel = Span(self.area.sel.left, next_line_ending)
     
-    def compute_previous_start_of_line(self):
-        previous_line_start = self.area.value.rfind('\n', 0, self.area.sel.left)
+    def compute_previous_start_of_line(self, starting_value=None):
+        if not starting_value:
+            starting_value = self.area.sel.left
+        previous_line_start = self.area.value.rfind('\n', 0, starting_value)
         if previous_line_start == -1:
             return 0
         return previous_line_start + 1
@@ -261,6 +263,23 @@ class DraftManager:
     def extend_start_of_line(self):
         previous_line_start = self.compute_previous_start_of_line()
         self.area.sel = Span(previous_line_start, self.area.sel.right)
+    
+    def reduce_selection(self, left_amount, right_amount):
+        self.extend_selection(-left_amount, -right_amount)
+
+    def extend_selection_up(self):
+        distance_from_line_start = self.area.sel.left - self.compute_previous_start_of_line()
+        start_of_previous_line = self.compute_previous_start_of_line()
+        if start_of_previous_line > 0:
+            amount_of_text_on_previous_line = start_of_previous_line - self.compute_previous_start_of_line(start_of_previous_line - 1)
+        else:
+            amount_of_text_on_previous_line = 0
+        self.extend_start_of_line()
+        self.extend_selection(1, 0)
+        if amount_of_text_on_previous_line > distance_from_line_start:
+            self.extend_start_of_line()
+            self.reduce_selection(distance_from_line_start, 0)
+
     
 if False:
     # Some code for testing, change above False to True and edit as desired

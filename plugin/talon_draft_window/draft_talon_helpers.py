@@ -136,6 +136,9 @@ class WindowsEditActions:
     def extend_line_start():
         draft_manager.extend_start_of_line()
 
+    def extend_line_up():
+        draft_manager.extend_selection_up()
+
 from talon import cron
 
 
