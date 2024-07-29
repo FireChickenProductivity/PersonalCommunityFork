@@ -322,6 +322,11 @@ def format_phrase(
     # way and I don't feel like rewriting it just now. -rntz, 2020-11-04
     return result
 
+def get_correct_formatter(formatter: str):
+    if formatter in formatters_dict:
+        return formatters_dict[formatter]
+    if formatter in code_formatter_names:
+        return formatters_dict[code_formatter_names[formatter]]
 
 def format_text_without_adding_to_history(
     text: str, formatters: str, unformat: bool = False
@@ -333,7 +338,7 @@ def format_text_without_adding_to_history(
     text, pre, post = shrink_to_string_inside(text)
 
     for i, formatter_name in enumerate(reversed(formatters.split(","))):
-        formatter = formatters_dict[formatter_name]
+        formatter = get_correct_formatter(formatter_name)
         if unformat and i == 0:
             text = formatter.unformat(text)
         text = formatter.format(text)
